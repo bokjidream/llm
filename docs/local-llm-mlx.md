@@ -4,16 +4,22 @@ Apple Silicon Mac에서 `mlx-lm`을 사용해 Gemma 4 모델을 로컬에서 실
 
 ## 요구 사항
 
-- Apple Silicon Mac (M1 / M2 / M3 / M4)
+- Apple Silicon Mac (RAM 16GB 이상 권장)
 - Python 3.11+
-- `mlx-lm` 설치
 
 ## 1. mlx-lm 설치
 
 ```bash
+# 별도 디렉토리 생성 및 venv 설정 권장
+mkdir ../mlx
+cd ../mlx
+
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip3 install mlx-lm
+
+# mlx-lm 설치
+# 260514 기준 mlx-lm==0.31.2 버전 이상에서 gemma-4-e4b-it-8bit 모델 실행 시 오류 발생.
+pip3 install mlx-lm==0.31.2
 ```
 
 ## 2. 서버 실행
@@ -35,8 +41,6 @@ mlx_lm.server \
 LLM_BASE_URL=http://localhost:8080
 LLM_DEFAULT_MODEL=mlx-community/gemma-4-e4b-it-8bit
 ```
-
-이후 `make dev`로 API 서버를 실행하면 됩니다.
 
 ## 참고
 
