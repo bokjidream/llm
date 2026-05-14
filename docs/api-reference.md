@@ -42,7 +42,7 @@ OpenAI Chat Completions API와 동일한 형식.
 ### 기본 요청
 
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://localhost:8002/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "messages": [{"role": "user", "content": "안녕하세요"}],
@@ -79,7 +79,7 @@ curl http://localhost:8000/v1/chat/completions \
 ### 스트리밍 (`stream: true`)
 
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://localhost:8002/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "messages": [{"role": "user", "content": "안녕하세요"}],

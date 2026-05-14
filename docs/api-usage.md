@@ -1,12 +1,12 @@
 # 사용 예시
 
-## Python 클라이언트 예시
+## API 사용 예시
 
 ```python
 import json
 import httpx
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8002"
 
 
 def ask_question(client: httpx.Client, field: str, re_ask: bool, timeout: int,
