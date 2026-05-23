@@ -32,3 +32,6 @@ tests
 # macOS
 .DS_Store
 **/.DS_Store
+
+# 백업
+*.bak

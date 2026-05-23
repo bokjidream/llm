@@ -131,6 +131,76 @@ client.chat.completions.create(
 
 ---
 
+### `field_extractor`
+
+서비스 수급 조건을 분석해 기본 항목(`asker`/`interviewer`가 수집하는 9개 필드)으로 커버되지 않는 추가 필드를 추출하는 에이전트. 출력은 JSON 문자열로 반환됩니다.
+
+**입력 필드**
+
+| 필드 | 필수 | 설명 |
+|------|:----:|------|
+| `service.serv_nm` | ✓ | 서비스명 |
+| `service.tgtr_dtl_cn` | ✓ | 지원 대상 상세 |
+| `service.slct_crit_cn` | ✓ | 선정 기준 |
+| `service.trgter_indvdl` | ✓ | 대상자 유형 배열 |
+
+**출력 필드 (`extra_fields` 배열의 각 항목)**
+
+| 필드 | 설명 |
+|------|------|
+| `key` | snake_case 식별자 |
+| `label` | 한국어 명칭 |
+| `type` | `"bool"` `"int"` `"string"` `"enum"` |
+| `enum_values` | `type=enum`일 때만 포함 |
+| `question_hint` | `detail_asker`에게 전달할 질문 방향 힌트 |
+| `reason` | 해당 정보가 필요한 이유 |
+
+추가 필드가 없으면 `{"extra_fields": []}` 반환.
+
+---
+
+### `detail_asker`
+
+`field_extractor`가 추출한 추가 필드에 대해 질문을 생성하는 에이전트. `asker`와 역할은 같지만 입력 구조가 다릅니다.
+
+**입력 필드**
+
+| 필드 | 필수 | 설명 |
+|------|:----:|------|
+| `field` | ✓ | `field_extractor`가 반환한 필드 객체 전체 |
+| `re_ask` | ✓ | 재질문 여부 |
+| `pre_assistant_message` | | 직전 봇 발화 |
+| `pre_user_message` | | 직전 사용자 발화 |
+
+**출력**
+
+질문 텍스트 (plain text).
+
+---
+
+### `detail_interviewer`
+
+`detail_asker`의 질문에 대한 사용자 답변에서 추가 필드 값을 추출하는 에이전트. `interviewer`와 역할은 같지만 `information` 대신 `field` 객체를 받습니다.
+
+**입력 필드**
+
+| 필드 | 필수 | 설명 |
+|------|:----:|------|
+| `field` | ✓ | `field_extractor`가 반환한 필드 객체 전체 |
+| `assistant_message` | ✓ | 봇이 했던 질문 |
+| `user_message` | ✓ | 사용자 답변 |
+
+**출력 필드**
+
+| 필드 | 설명 |
+|------|------|
+| `exist` | 값 추출 성공 여부 |
+| `value` | 추출값 (`exist=false`면 `null`). 타입은 `field.type`을 따름 |
+| `re_ask` | 재질문 필요 여부 |
+| `reasoning` | 판단 근거 |
+
+---
+
 ### `elig_reasoner`
 
 복지 서비스 추천 근거를 설명하는 에이전트. 사용자 정보와 서비스 데이터를 받아 추천 이유를 한 문장으로 반환합니다.
