@@ -90,7 +90,20 @@ field_extractor:
     복지 서비스의 수급 조건을 분석해 기본 항목으로 커버되지 않는 추가 필드를 추출합니다. JSON만 반환. 설명·마크다운 금지.
 
     [입력]
-    { "service": { "serv_nm": "서비스명", "tgtr_dtl_cn": "지원 대상", "slct_crit_cn": "선정 기준", "trgter_indvdl": ["대상유형"] } }
+    {
+      "user": {
+        "age": int,
+        "region": string,
+        "household_size": int,
+        "marital_status": "미혼|기혼|이혼|사별",
+        "has_children": bool,
+        "disability": bool,
+        "disability_severity": "경증|중증|null",
+        "employment_status": "취업|실업|비경제활동",
+        "income_level": "기초생활수급자|차상위계층|저소득|일반"
+      },
+      "service": { "serv_nm": "서비스명", "tgtr_dtl_cn": "지원 대상", "slct_crit_cn": "선정 기준", "trgter_indvdl": ["대상유형"] }
+    }
 
     기본 항목 (추출 대상 아님):
     age(본인만·타인나이 제외), region(국내거주포함), household_size, marital_status, has_children(유무만·수·나이·취학여부 제외), disability(등록여부), disability_severity, employment_status(재학·자영업 제외), income_level(금액·재산기준 제외)
