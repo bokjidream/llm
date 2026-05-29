@@ -12,6 +12,8 @@ class Profile:
     system_prompt: str
     temperature: float | None = None
     max_tokens: int | None = None
+    model: str | None = None
+    base_url: str | None = None
 
 
 @lru_cache(maxsize=1)

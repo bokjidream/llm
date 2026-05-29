@@ -1,15 +1,18 @@
 from app.config import settings
 from app.services.backends import BaseBackend, OpenAICompatBackend
 
-
-def _create_backend() -> BaseBackend:
-    return OpenAICompatBackend(
-        settings.llm_base_url,
-        settings.llm_default_model,
-        settings.llm_request_timeout,
-        settings.llm_api_key,
-        settings.llm_min_request_interval,
-    )
+_backends: dict[str, BaseBackend] = {}
 
 
-llm_client: BaseBackend = _create_backend()
+def get_backend(base_url: str) -> BaseBackend:
+    if base_url not in _backends:
+        _backends[base_url] = OpenAICompatBackend(
+            base_url,
+            settings.llm_default_model,
+            settings.llm_request_timeout,
+            settings.llm_api_key,
+        )
+    return _backends[base_url]
+
+
+llm_client: BaseBackend = get_backend(settings.llm_base_url)
