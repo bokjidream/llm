@@ -16,7 +16,7 @@ OpenAI Chat Completions API와 동일한 형식.
 | `top_p` | `float` | | 0.0 ~ 1.0. nucleus sampling |
 | `response_format` | `object` | | `{"type": "json_object"}` 으로 JSON 모드 활성화 |
 
-> `model` 필드는 OpenAI와 달리 **프로필 이름**으로 해석됩니다. 실제 LLM 모델은 `.env`의 `LLM_DEFAULT_MODEL`로 고정됩니다.
+> `model` 필드는 OpenAI와 달리 **프로필 이름**으로 해석됩니다. 실제로 호출되는 LLM 모델/백엔드 주소는 해당 프로필이 `model`/`base_url`을 지정했는지에 따라 달라집니다 — 지정돼 있으면 그 값을 쓰고, 없으면 `.env`의 `LLM_DEFAULT_MODEL`/`LLM_BASE_URL`을 사용합니다. 자세한 내용은 [프로필 문서](./profiles.md)를 참고하세요.
 
 ### `messages[].role` 상세
 
@@ -57,7 +57,7 @@ curl http://localhost:8002/v1/chat/completions \
   "id": "chatcmpl-abc123",      // 응답 고유 ID
   "object": "chat.completion",  // 항상 "chat.completion"
   "created": 1700000000,        // 응답 생성 시각 (Unix timestamp)
-  "model": "gemma-4-2b",        // 실제로 사용된 LLM 모델명 (LLM_DEFAULT_MODEL)
+  "model": "gemma-4-2b",        // 실제로 사용된 LLM 모델명 (프로필의 model, 없으면 LLM_DEFAULT_MODEL)
   "choices": [{
     "index": 0,
     "message": {

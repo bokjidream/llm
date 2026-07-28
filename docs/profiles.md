@@ -4,15 +4,19 @@
 
 ## 프로필 파라미터
 
-현재 지원하는 파라미터는 아래 3개입니다 (`app/profiles/loader.py`의 `Profile` 데이터클래스에 정의).
+현재 지원하는 파라미터는 아래 5개입니다 (`app/profiles/loader.py`의 `Profile` 데이터클래스에 정의).
 
 | 파라미터 | 필수 | 설명 |
 |---------|:----:|------|
 | `system_prompt` | ✓ | 에이전트에게 부여할 시스템 프롬프트 |
 | `temperature` | | 기본 temperature. 요청에서 명시하면 요청 값이 우선 |
 | `max_tokens` | | 기본 최대 토큰 수. 요청에서 명시하면 요청 값이 우선 |
+| `model` | | 이 프로필 전용 LLM 모델명. 생략 시 `.env`의 `LLM_DEFAULT_MODEL` 사용 |
+| `base_url` | | 이 프로필 전용 백엔드 주소. 생략 시 `.env`의 `LLM_BASE_URL` 사용 |
 
 `top_p`, `response_format` 등 다른 파라미터는 프로필에서 설정할 수 없고 요청마다 직접 전달해야 합니다.
+
+`model` / `base_url`을 지정하면 해당 프로필만 다른 LLM 서버·모델로 라우팅됩니다. 예를 들어 `asker`/`detail_asker`는 로컬 mlx_lm 서버(`http://localhost:8080`)의 경량 모델을, `elig_reasoner`는 외부 Groq API의 대형 모델을 쓰도록 각각 지정할 수 있습니다.
 
 ## 예시
 
@@ -45,6 +49,9 @@ messages에 system 있음 → 덮어쓰지 않음 (그대로 사용)
   ↓
 요청에 temperature 명시 → 프로필 값 무시, 요청 값 사용
 요청에 temperature 없음 → 프로필 기본값 사용
+  ↓
+프로필에 model/base_url 지정 → 해당 값으로 실제 백엔드 호출
+프로필에 model/base_url 생략 → .env의 LLM_DEFAULT_MODEL / LLM_BASE_URL 사용
 ```
 
 ## LangGraph 에이전트에서 사용 예
@@ -150,7 +157,7 @@ client.chat.completions.create(
 |------|------|
 | `key` | snake_case 식별자 |
 | `label` | 한국어 명칭 |
-| `type` | `"bool"` `"int"` `"string"` `"enum"` |
+| `type` | `"bool"` `"enum"` (수치 조건도 bool/enum으로 변환되어 반환됨) |
 | `enum_values` | `type=enum`일 때만 포함 |
 | `question_hint` | `detail_asker`에게 전달할 질문 방향 힌트 |
 | `reason` | 해당 정보가 필요한 이유 |

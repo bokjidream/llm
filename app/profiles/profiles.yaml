@@ -2,7 +2,7 @@ default:
   system_prompt: "당신은 유능한 AI 어시스턴트입니다."
   temperature: 0.7
   max_tokens: 2048
-  # model, base_url 생략 시 settings의 llm_default_model / llm_base_url 사용
+  # model, base_url 생략 시 env의 LLM_DEFAULT_MODEL / LLM_BASE_URL 사용
 
 interviewer:
   system_prompt: |
@@ -126,7 +126,7 @@ asker:
     /no_think
   temperature: 0.7
   max_tokens: 2048
-  model: mlx-community/gemma-4-e4b-it-8bit
+  model: mlx-community/gemma-4-e4b-it-4bit
   base_url: http://localhost:8080
 
 elig_reasoner:
@@ -162,6 +162,7 @@ elig_reasoner:
     추천 이유 한 문장. 예) "만 65세 이상 저소득 노인을 대상으로 하는 서비스로, 사용자의 나이(72세)와 소득 수준(저소득)이 수급 조건에 해당합니다."
   temperature: 0.3
   max_tokens: 8192
+  model: llama-3.3-70b-versatile
 
 field_extractor:
   system_prompt: |
@@ -180,6 +181,12 @@ field_extractor:
 
     [입력]
     {
+      "service": {
+        "serv_nm": "서비스명",
+        "tgtr_dtl_cn": "지원 대상 상세",
+        "slct_crit_cn": "선정 기준",
+        "trgter_indvdl": ["대상자 유형1", "대상자 유형2", ...]
+      },
       "user": {
         "age": int,
         "region": string,
@@ -190,12 +197,6 @@ field_extractor:
         "disability_severity": "경증|중증|null",
         "employment_status": "취업|실업|비경제활동",
         "income_level": "기초생활수급자|차상위계층|저소득|일반"
-      },
-      "service": {
-        "serv_nm": "서비스명",
-        "tgtr_dtl_cn": "지원 대상 상세",
-        "slct_crit_cn": "선정 기준",
-        "trgter_indvdl": ["대상자 유형1", "대상자 유형2", ...]
       }
     }
 
@@ -256,7 +257,7 @@ field_extractor:
     }
     유지되는 필드만 포함. 없으면 {"extra_fields": []} 반환.
   temperature: 0.3
-  max_tokens: 2048
+  max_tokens: 4096
 
 detail_interviewer:
   system_prompt: |
@@ -370,7 +371,7 @@ detail_asker:
     /no_think
   temperature: 0.7
   max_tokens: 2048
-  model: mlx-community/gemma-4-e4b-it-8bit
+  model: mlx-community/gemma-4-e4b-it-4bit
   base_url: http://localhost:8080
 
 # ── 에이전트 프로필 예시 ──────────────────────────────────────────────────────
